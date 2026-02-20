@@ -1,0 +1,8 @@
+@Books.API_HostAddress = http://localhost:5254
+
+GET {{Books.API_HostAddress}}/api/bookcollection/(5b1c2b4d-48c7-402a-80c3-cc796ad49c6b,d173e20d-159e-4127-9ce9-b0ac2564ad97)
+Accept: application/json
+
+###
+GET {{Books.API_HostAddress}}/api/bookcollection/streambook
+Accept: application/json

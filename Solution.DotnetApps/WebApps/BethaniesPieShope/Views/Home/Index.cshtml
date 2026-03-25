@@ -1,0 +1,19 @@
+﻿@model HomeViewModel
+
+<partial name="_CaroselPartialView" /> 
+
+<div class="text-center">
+    <img src="Images/bethanys-pie-shop-logomark.png" class="logo-mark mx-auto" />
+    <h1>@Model.Title</h1>
+    <h5>@Model.Description</h5>
+
+    <div class="pies-of-the-week">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @foreach (var pie in Model.PiesOfTheWeek)
+            {
+                <partial name="_PieCardPartialView" model="pie" />
+            }
+        </div>
+
+    </div>
+</div>

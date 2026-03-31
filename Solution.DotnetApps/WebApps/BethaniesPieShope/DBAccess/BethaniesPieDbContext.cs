@@ -1,9 +1,10 @@
 ﻿using BethaniesPieShope.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BethaniesPieShope.DBAccess;
 
-public sealed class BethaniesPieDbContext : DbContext
+public sealed class BethaniesPieDbContext : IdentityDbContext
 {
 
     public BethaniesPieDbContext(DbContextOptions<BethaniesPieDbContext> options)

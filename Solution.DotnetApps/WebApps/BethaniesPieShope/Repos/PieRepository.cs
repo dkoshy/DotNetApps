@@ -30,9 +30,8 @@ public class PieRepository : IPieRepository
 
         return _dbContext.Pies
             .Include(p => p.Category)
-            .Where(p => p.Name.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)
+            .Where(p => EF.Functions.ILike(p.Name,$"%{searchQuery}%")
                         || (p.LongDescription != null
-                        && p.LongDescription.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)))
-            .ToList();
+                        && EF.Functions.ILike(p.LongDescription, $"%{searchQuery}%") )).ToList();
     }
 }

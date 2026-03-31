@@ -49,7 +49,7 @@ public class PieController : Controller
 
     public IActionResult Search()
     {
-
+        return View();
     }
 
 }

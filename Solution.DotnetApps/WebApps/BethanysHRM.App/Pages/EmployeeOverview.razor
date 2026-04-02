@@ -1,0 +1,27 @@
+﻿@page "/employeeoverview"
+<PageTitle>@Title</PageTitle>
+<h2>Employee Overview</h2>
+
+@if (Employees is null)
+{
+    <p><em>Loading ...</em></p>
+}
+else
+{
+    <QuickViewPopup Employee="_selectedEmployee"></QuickViewPopup>
+
+    <div class="row">
+        @foreach (var emp in Employees)
+        {
+            <ErrorBoundary>
+                <ChildContent>
+                    <EmployeeCard Employee="emp" EmployeeQuickViewClicked="ShowQuickView"></EmployeeCard>
+                </ChildContent>
+                <ErrorContent>
+                    <p class="errorUI">Invalid Employee</p>
+                </ErrorContent>
+            </ErrorBoundary>
+        }
+    </div>
+}
+

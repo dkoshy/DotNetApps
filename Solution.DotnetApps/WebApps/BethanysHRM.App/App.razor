@@ -1,12 +1,39 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿@inject LazyAssemblyLoader LazyAssemblyLoader
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@LazyAssemblies"
+            OnNavigateAsync="onNavigationAsync">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <Authorizing>
+                    <p>Determining user Identity , Please wait...</p>
+                </Authorizing>
+                <NotAuthorized>
+                    <h1>Sorry!</h1>
+                    <p>You are not authorized to view this page. Please <a class="text-decoration-none" href="authentication/login">Log in</a> </p>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    private List<Assembly> LazyAssemblies = new List<Assembly>();
+
+    public async Task onNavigationAsync(NavigationContext args)
+    {
+        if (args.Path.Contains("employeedetails"))
+        {
+            var assemblies = await LazyAssemblyLoader.LoadAssembliesAsync(new string[] { "BethanyStore.Libraray.dll" });
+            LazyAssemblies.AddRange(assemblies);
+        }
+    }
+
+}

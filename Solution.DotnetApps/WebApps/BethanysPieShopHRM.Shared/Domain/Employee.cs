@@ -1,13 +1,20 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BethanysPieShopHRM.Shared.Domain
 {
     public class Employee
     {
         public int EmployeeId { get; set; }
+        [Required]
         public string FirstName { get; set; } = string.Empty;
+
+        [Required]
         public string LastName { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
+
+        [Required]
         public string Email { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string Zip { get; set; } = string.Empty;
@@ -27,5 +34,9 @@ namespace BethanysPieShopHRM.Shared.Domain
 
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
+
+        [NotMapped]
+        public byte[]? ImageContent { get; set; }
+        public string? ImageName { get; set; }
     }
 }

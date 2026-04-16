@@ -1,2 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using PublisherDataAccess;
+var dataContext = new PubDBContext();
+
+dataContext.Database.EnsureCreated();
+var isConnected = await dataContext.Database.CanConnectAsync();
+Console.WriteLine(isConnected);

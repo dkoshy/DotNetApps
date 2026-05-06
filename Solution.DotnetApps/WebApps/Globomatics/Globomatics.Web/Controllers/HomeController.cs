@@ -1,13 +1,15 @@
 ﻿using Globomantics.Domain.Models;
 using Globomatics.Infrastructure.Repositories;
+using Globomatics.Web.Filters;
 using Globomatics.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace Globomatics.Web.Controllers;
 
+[Authorize]
 public class HomeController : Controller
 {
     private readonly IRepository<Product> _productRepositiry;
@@ -19,10 +21,20 @@ public class HomeController : Controller
         _productRepositiry = productRepositiry;
         _logger = logger;
     }
+
+    [ServiceFilter(typeof(TimerFilter))]
     public IActionResult Index()
     {
         var products = _productRepositiry.All();
         _logger.LogInformation($"Fetched {products.Count()} Products");
+        var cookieoptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = DateTime.UtcNow.AddDays(1),
+            IsEssential = true,
+            SameSite = SameSiteMode.Strict
+        };
+        HttpContext.Response.Cookies.Append("userTheame", "white");
         return View(products);
     }
 

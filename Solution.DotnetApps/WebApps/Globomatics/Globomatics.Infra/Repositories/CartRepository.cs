@@ -19,11 +19,11 @@ public class CartRepository : GenericRepository<Cart>, ICartRepository
 
         if (isNewCart)
         {
-            context.Add(cart);
+            context.Carts.Add(cart);
         }
         else
         {
-            context.Update(cart);
+            context.Carts.Update(cart);
         }
 
         return cart;

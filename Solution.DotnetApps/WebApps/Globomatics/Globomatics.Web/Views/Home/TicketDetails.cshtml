@@ -1,7 +1,10 @@
 ﻿@model Product
 
-<h1>@Model.Name</h1>
+@* <h1>@Model.Name</h1>
 
 <img src="~/img/products/@(Model.ProductId).jpg") alt="@(Model.Name)" />
 
-<h5>@Model.Price</h5>
+<h5>@Model.Price</h5> *@
+
+@* <partial name="_TicketCard" model="Model" /> *@
+@await Html.PartialAsync("_TicketCard", Model)

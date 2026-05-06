@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject IStateRepository istaterepository
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,7 +34,12 @@
                         <div class="header-cart justify-content-center">
                             <img src="~/img/cart.svg" />
 
-                            <p><span>0</span> tickets</p>
+                            <p>
+                                <span>
+                                    @(string.IsNullOrWhiteSpace(istaterepository.GetValue("NumberOfItems")) ? "0"
+                                                                        : istaterepository.GetValue("NumberOfItems"))
+                                </span> tickets
+                            </p>
                         </div>
                     </div>
                 </div>

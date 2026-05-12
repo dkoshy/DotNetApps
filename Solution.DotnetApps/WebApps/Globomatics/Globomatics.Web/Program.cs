@@ -17,6 +17,7 @@ builder.Services.AddControllersWithViews(opt =>
 {
     opt.ValueProviderFactories.Add(new SessionValueProviderFactory());
 });
+builder.Services.AddRazorPages();
 builder.Services.AddRouting(opt =>
 {
     opt.ConstraintMap.Add("slugvalue", typeof(SlugConstraint));
@@ -24,13 +25,52 @@ builder.Services.AddRouting(opt =>
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+
+//session configuration
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Path = "/";
+    options.Cookie.Name = "__Globomantics.Session";
+    options.Cookie.MaxAge = TimeSpan.FromHours(1);
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+
+
+});
+
+//identity cookie configuration
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.Path = "/";
+    options.Cookie.Name = "__Globomantics.Identity";
+    options.Cookie.MaxAge = TimeSpan.FromHours(12);
+    options.ExpireTimeSpan = TimeSpan.FromHours(12);
+});
 
 builder.Services.AddDbContext<GlobalManticsIdentityContext>(ServiceLifetime.Scoped);
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<GlobalManticsIdentityContext>();
 builder.Services.AddDbContext<GlobomanticsContext>(ServiceLifetime.Scoped);
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<GlobalManticsIdentityContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 10;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+
+    //rate limit failed login attempts.
+    options.Lockout.MaxFailedAccessAttempts = 2;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+});
 
 //Application Services
 builder.Services.AddTransient<IStateRepository, SessionstateRepository>();
@@ -73,5 +113,5 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 app.Run();

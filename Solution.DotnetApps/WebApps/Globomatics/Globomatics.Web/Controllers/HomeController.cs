@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace Globomatics.Web.Controllers;
 
-[Authorize]
+
 public class HomeController : Controller
 {
     private readonly IRepository<Product> _productRepositiry;

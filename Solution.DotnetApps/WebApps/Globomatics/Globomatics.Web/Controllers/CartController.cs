@@ -1,11 +1,15 @@
 ﻿using Globomantics.Domain.Models;
 using Globomatics.Infrastructure.Repositories;
+using Globomatics.Web.Attributes;
 using Globomatics.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging;
 
 namespace Globomatics.Web.Controllers;
 
+[Authorize]
+//[EnforceStepUpAuth]
 [Route("[Controller]")]
 public class CartController : Controller
 {
